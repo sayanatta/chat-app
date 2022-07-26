@@ -1,0 +1,11 @@
+{
+  "name": "chat-app",
+  "version": "1.0.0",
+  "description": "Chat Application With NodeJs & React Js",
+  "main": "index.js",
+  "repository": "https://github.com/sayanatta/chat-app",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.1"
+  }
+}
