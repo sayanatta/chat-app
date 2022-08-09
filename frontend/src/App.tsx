@@ -1,8 +1,14 @@
+import { Route, Routes } from 'react-router-dom';
+import { LoginPage, SignUpPage } from './pages';
+
 const App = () => {
   return (
-    <div>
-      <h1 className='text-3xl font-bold underline'>Hello world!</h1>
-    </div>
+    <>
+      <Routes>
+        <Route path='/login' element={<LoginPage />} />
+        <Route path='/signup' element={<SignUpPage />} />
+      </Routes>
+    </>
   );
 };
 
