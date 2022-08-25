@@ -1,14 +1,14 @@
-import { MongoClient } from "mongodb";
+import mongoose from "mongoose";
+const Schema = mongoose.Schema;
 
-const Schema = MongoClient.Schema;
-
-export const userSchema = new Schema({
+const userSchema = new Schema({
   name: {
     type: String,
     required: "Enter your name",
   },
   email: {
     type: String,
+    unique: true,
     required: "Enter your email",
   },
   password: {
@@ -21,3 +21,5 @@ export const userSchema = new Schema({
     default: Date.now(),
   },
 });
+
+export const UserModel = mongoose.model("user", userSchema);

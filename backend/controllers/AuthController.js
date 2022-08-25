@@ -1,11 +1,23 @@
-// import UserModel from "../models/User.js";
+import { UserModel } from "../models/User.js";
+import bcrypt from "bcryptjs";
 
 const signup = async (req, res) => {
-  //   const { name, email, password } = req.body;
-  //   const user = await UserModel.create(req.body);
-  //   res.status(200).json({ success: true, data: user });
-  res.send("Hello Developer, Calling API Properly!!!");
+  try {
+    const salt = await bcrypt.genSalt(10);
+    let password = await bcrypt.hash(req.body.password, salt);
+
+    const user = await UserModel.create({
+      name: req.body.name,
+      email: req.body.email,
+      password: password,
+    });
+
+    res
+      .status(200)
+      .json({ success: true, data: user, msg: "User created successfully" });
+  } catch (e) {
+    res.status(500).json({ success: false, msg: res });
+  }
 };
 
-// module.exports = { signup };
 export default { signup };

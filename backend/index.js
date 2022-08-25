@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import { dbConnect } from "../backend/lib/db.js";
+import "../backend/lib/db.js";
 import AuthRouter from "./routes/auth.js";
 import BodyParser from "body-parser";
 
@@ -12,7 +12,7 @@ app.use(BodyParser.urlencoded({ extended: false }));
 app.use(BodyParser.json());
 app.use("/api", AuthRouter);
 
-dbConnect();
+// dbConnect();
 
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
