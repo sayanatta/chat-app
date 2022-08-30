@@ -12,8 +12,6 @@ app.use(BodyParser.urlencoded({ extended: false }));
 app.use(BodyParser.json());
 app.use("/api", AuthRouter);
 
-// dbConnect();
-
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
 });

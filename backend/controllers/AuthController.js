@@ -1,14 +1,22 @@
 import { UserModel } from "../models/User.js";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
 const signup = async (req, res) => {
   try {
+    let name = req.body.name;
+    let email = req.body.email;
+    let password = req.body.password;
+
     const salt = await bcrypt.genSalt(10);
-    let password = await bcrypt.hash(req.body.password, salt);
+    password = await bcrypt.hash(req.body.password, salt);
+
+    console.log("Hello", req.body);
+    return false;
 
     const user = await UserModel.create({
-      name: req.body.name,
-      email: req.body.email,
+      name: name,
+      email: email,
       password: password,
     });
 
@@ -29,9 +37,14 @@ const signin = async (req, res) => {
         user.password
       );
       if (validPassword) {
-        res
-          .status(200)
-          .json({ success: true, msg: "Login Successful", data: user });
+        jwt.sign({ user }, "secretKey", (err, token) => {
+          res.status(200).json({
+            success: true,
+            msg: "Login Successful",
+            data: user,
+            token,
+          });
+        });
       } else {
         res.status(400).json({ success: false, msg: "Invalid Password" });
       }
