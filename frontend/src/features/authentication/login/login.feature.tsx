@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useEffect } from 'react';
@@ -22,11 +22,12 @@ export const schema = yup
   .required();
 
 const LoginFeature = () => {
+  const navigate = useNavigate();
   const {
     handleSubmit,
     register,
     formState,
-    formState: { errors, isSubmitting },
+    formState: { errors },
     reset,
   } = useForm<UserLoginForm>({
     resolver: yupResolver(schema),
@@ -40,7 +41,19 @@ const LoginFeature = () => {
   }, [formState, reset]);
 
   const onSubmit = async (data: UserLoginForm) => {
-    console.log(data);
+    // console.log(data);
+    try {
+      const response = await fetch('http://localhost:3001/api/sign-in', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      const responseData = await response.json();
+      // console.log(responseData);
+      navigate('/');
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -76,7 +89,7 @@ const LoginFeature = () => {
       <button
         type='submit'
         className='bg-blue-500 text-white uppercase px-8 py-4 tracking-wide'>
-        login
+        {'login'}
       </button>
       <p>
         Don’t have an account?{' '}
