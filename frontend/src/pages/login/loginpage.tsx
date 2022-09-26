@@ -1,7 +1,13 @@
+import { Navigate } from 'react-router-dom';
 import { LoginFeature } from '../../features/authentication';
 import { PageContainer } from '../../layouts';
 
 const LoginPage = () => {
+  const auth = { token: false };
+
+  if (auth.token) {
+    return <Navigate to='/' />;
+  }
   return (
     <PageContainer>
       <section className='grid grid-cols-12 gap-6 lg:gap-0 flex-1'>
