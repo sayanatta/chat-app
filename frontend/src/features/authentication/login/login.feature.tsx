@@ -2,25 +2,11 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useEffect } from 'react';
-import * as yup from 'yup';
 import { InputComponent } from '../../../components';
-
-export type UserLoginForm = {
-  email: string;
-  password: string;
-};
-export const schema = yup
-  .object({
-    email: yup
-      .string()
-      .required('Please provide your email address.')
-      .email('Please provide a valid email address.'),
-    password: yup
-      .string()
-      .required('Please provide your password.')
-      .min(4, 'Password is too short - should be 4 chars minimum.'),
-  })
-  .required();
+import { UserLoginPayload } from '../types';
+import { loginValidationSchema } from '../validation';
+import { useAppDispatch, useAppSelector } from '../../../hooks/useredux.hook';
+import { login } from '../store/authentication.slice';
 
 const LoginFeature = () => {
   const navigate = useNavigate();
@@ -30,31 +16,25 @@ const LoginFeature = () => {
     formState,
     formState: { errors },
     reset,
-  } = useForm<UserLoginForm>({
-    resolver: yupResolver(schema),
+  } = useForm<UserLoginPayload>({
+    resolver: yupResolver(loginValidationSchema),
     defaultValues: { email: '', password: '' },
   });
 
-  useEffect(() => {
-    if (formState.isSubmitSuccessful) {
-      reset({ email: '', password: '' });
-    }
-  }, [formState, reset]);
+  const dispatch = useAppDispatch();
+  const { isError, isLoading, isSuccess, message, user } = useAppSelector(
+    state => state.auth
+  );
 
-  const onSubmit = async (data: UserLoginForm) => {
-    // console.log(data);
-    try {
-      const response = await fetch('http://localhost:3001/api/sign-in', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      });
-      const responseData = await response.json();
-      // console.log(responseData);
+  useEffect(() => {
+    if (isSuccess || user) {
+      reset({ email: '', password: '' });
       navigate('/');
-    } catch (error) {
-      console.log(error);
     }
+  }, [user, isSuccess, navigate, reset]);
+
+  const onSubmit = async (data: UserLoginPayload) => {
+    dispatch(login(data));
   };
 
   return (
@@ -85,7 +65,7 @@ const LoginFeature = () => {
       <button
         type='submit'
         className='bg-blue-500 text-white uppercase px-8 py-4 tracking-wide w-full'>
-        {'login'}
+        login
       </button>
       <p>
         Don’t have an account?{' '}

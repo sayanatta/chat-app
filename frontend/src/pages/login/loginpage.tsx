@@ -1,11 +1,11 @@
 import { Navigate } from 'react-router-dom';
 import { LoginFeature } from '../../features/authentication';
+import { useAppSelector } from '../../hooks/useredux.hook';
 import { PageContainer } from '../../layouts';
 
 const LoginPage = () => {
-  const auth = { token: false };
-
-  if (auth.token) {
+  const { user } = useAppSelector(state => state.auth);
+  if (user?.token) {
     return <Navigate to='/' />;
   }
   return (
