@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useEffect } from 'react';
 import * as yup from 'yup';
+import { InputComponent } from '../../../components';
 
 export type UserLoginForm = {
   email: string;
@@ -57,38 +58,33 @@ const LoginFeature = () => {
   };
 
   return (
-    <form className='mt-10 grid gap-4' onSubmit={handleSubmit(onSubmit)}>
-      <div className='grid gap-2'>
-        <label htmlFor='email'>Email Address</label>
-        <input
-          type='email'
-          id='email'
-          placeholder='name@demomail.com'
-          className='bg-gray-200 p-4 h-14'
-          {...register('email')}
-        />
-        {errors.email && (
-          <p className='text-sm text-red-500'>{errors.email?.message}</p>
-        )}
-      </div>
-      <div className='grid gap-2'>
-        <label htmlFor='password'>Password</label>
-        <input
-          type='password'
-          id='password'
-          className='bg-gray-200 p-4 h-14 '
-          {...register('password')}
-        />
-        {errors.password && (
-          <p className='text-sm text-red-500'>{errors.password?.message}</p>
-        )}
-      </div>
-      <Link to='#' className='text-right text-blue-600 -mt-2'>
+    <form
+      className='mt-10 grid gap-4 justify-items-start'
+      onSubmit={handleSubmit(onSubmit)}>
+      <InputComponent
+        name='email'
+        id='email'
+        type='email'
+        placeholder='name@demomail.com'
+        label='Email Address'
+        error={errors.email}
+        register={register}
+      />
+      <InputComponent
+        name='password'
+        id='password'
+        type='password'
+        placeholder='**********'
+        label='Password'
+        error={errors.password}
+        register={register}
+      />
+      <Link to='#' className='text-right text-blue-600 -mt-2 justify-self-end'>
         Reset Password
       </Link>
       <button
         type='submit'
-        className='bg-blue-500 text-white uppercase px-8 py-4 tracking-wide'>
+        className='bg-blue-500 text-white uppercase px-8 py-4 tracking-wide w-full'>
         {'login'}
       </button>
       <p>
